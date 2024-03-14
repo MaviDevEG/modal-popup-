@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>-</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Estilos CSS */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Adiciona a transição para a borda */
+}
+
+button:hover {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff; /* Adiciona uma borda no hover */
+}
+
+#modal-overlay {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes float {
+  from {
+    transform: translate(-50%, -50%) translateY(-10px);
+  }
+  to {
+    transform: translate(-50%, -50%) translateY(10px);
+  }
+}
+
+#modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.modal-close {
+  cursor: pointer;
+  color: #007bff;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  fill: #007bff;
+}
+
+#contador {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#modal img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  margin: 20px auto;
+  display: block;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-group .btn {
+  margin-right: 14px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  width: 600px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  border-radius: 5px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.dropdown-table {
+  width: 100%;
+  text-align: left;
+}
+
+.dropdown-item {
+  font-size: 12px;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* Estilos dos botões */
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Adiciona a transição para a borda */
+}
+
+.btn:hover {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff; /* Adiciona uma borda no hover */
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: transparent;
+  color: #007bff;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: transparent;
+  color: #6c757d;
+  border: 2px solid #6c757d; /* Adiciona uma borda no hover */
+}
+
+/* Media Query para dispositivos móveis */
+@media only screen and (max-width: 767px) {
+  #modal-overlay {
+    top: 50%;
+  }
+
+  #modal {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-group .btn {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="modal-overlay">
+  <div id="modal">
+    <div class="modal-close" onclick="closeModal(event)">
+      <svg id="close-icon" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
+    </div>
+    <div id="contador"></div>
+    <img src="https://static.wixstatic.com/media/08bb2c_370fddb4d0a14d5787e60d238747399c~mv2.png" alt="Imagem do Modal" style="width: 400px; height: auto;">
+
+    <br>
+
+    <div class="btn-group">
+      <div>
+        <button id="dropdown-btn" type="button" class="btn btn-primary" onclick="toggleDropdown(event)">O que está incluso?</button>
+        <div id="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+          <table class="dropdown-table">
+            <tr>
+              <td class="dropdown-item"><strong>PACOTE DE PÁSCOA 28 A 31/03</strong></td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Pensão Completa.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Diversão para seus filhos com Monitores.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Passeios a Cavalo.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Atividades e recreações para toda família.</td>
+            </tr>
+          </table>
+
+          <br>
+
+          <table class="dropdown-table">
+            <tr>
+              <td class="dropdown-item"><strong>ATIVIDADES RECRETIVAS</strong></td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Choco Bingo.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Lual com Marshmallow.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Oficinas.</td>
+            </tr>
+            <tr>
+              <td class="dropdown-item">✅ Futsabão.</td>
+            </tr>
+            <tr>
+                <td class="dropdown-item">✅ Festa da Espuma.</td>
+            </tr>
+            <tr>
+                <td class="dropdown-item">✅ Caça aos Ovos.</td>
+            </tr>
+            <tr>
+                <td class="dropdown-item">✅ Pic Nic com Willy Wonka.</td>
+            </tr>
+            <tr>
+                <td class="dropdown-item">✅ Entrega dos ovos com o coelho e muito mais.</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <a href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Quero%20reservar%20o%20pacote%20da%20promoção" target="_blank">
+        <button type="button" class="btn btn-secondary">Reservar pacote</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function closeModal(event) {
+  if (event.target.id === 'close-icon') {
+    document.getElementById("modal-overlay").style.display = "none";
+  }
+}
+
+window.onload = function() {
+  openModal();
+};
+
+function openModal() {
+  document.getElementById("modal-overlay").style.display = "flex";
+}
+
+function toggleDropdown(event) {
+  event.stopPropagation();
+  var dropdownMenu = document.getElementById("dropdown-menu");
+  dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+}
+
+const dataTermino = new Date();
+dataTermino.setHours(dataTermino.getHours() + 23);
+dataTermino.setMinutes(dataTermino.getMinutes() + 59);
+
+function atualizarContador() {
+  const agora = new Date().getTime();
+  const diferenca = dataTermino - agora;
+
+  const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+  document.getElementById("contador").innerHTML = A promoção acaba em: ${horas}h ${minutos}min ${segundos}s;
+
+  if (diferenca < 0) {
+    clearInterval(contadorInterval);
+    document.getElementById("contador").innerHTML = "Promoção Encerrada";
+  }
+}
+
+atualizarContador(); 
+const contadorInterval = setInterval(atualizarContador, 1000); 
+</script>
+
+</body>
+</html>
